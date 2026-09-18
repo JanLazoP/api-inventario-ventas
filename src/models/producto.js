@@ -34,10 +34,11 @@ const Producto = sequelize.define('Producto', {
     },
 
     categoriaId: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
 },{
-    tableName: 'Productos',
+    tableName: 'productos',
     timestamps: false
 });
 

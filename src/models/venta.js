@@ -25,11 +25,14 @@ const Venta = sequelize.define('Venta', {
     },
 
     productoId:{
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull: false
+
     },
 
     clienteId: {
-        tpye: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
 
 }, {
