@@ -8,6 +8,6 @@ const router = express.Router();
 router.get('/', obtenerVentas);
 router.post('/', verificarToken, validarVenta, crearVenta);
 router.put('/:id', verificarToken, validarVenta, actualizarVenta);
-router.delete('/:id', verificarToken, validarVenta, eliminarVenta);
+router.delete('/:id', verificarToken, eliminarVenta);
 
 export default router;
