@@ -18,6 +18,7 @@ export const validarVenta = (req, res, next) => {
             error: "La cantidad debe ser un entero positivo"
         });
     }
+    
     if(total === undefined || total <= 0){
         return res.status(400).json({
             error: "El total debe ser mayor a 0"

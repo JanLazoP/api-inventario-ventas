@@ -13,6 +13,29 @@ export const obtenerClientes = async (req, res) => {
     }
 }
 
+export const obtenerCliente = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const cliente = await Cliente.findByPk(id);
+
+        if (!cliente) {
+            return res.status(404).json({
+                error: "Cliente no encontrado"
+            });
+        }
+
+        res.status(200).json(cliente);
+
+    } catch (error) {
+        console.error("Error al obtener Cliente:", error.message);
+
+        res.status(500).json({
+            error: "Error al obtener Cliente"
+        });
+    }
+};
+
 export const crearCliente = async (req, res) => {
     try{
         const { nombre, email, telefono, direccion } = req.body
@@ -77,7 +100,7 @@ export const eliminarCliente = async (req, res) => {
     try{
         const { id } = req.params;
 
-        const cliente = Cliente.findByPk(id);
+        const cliente = await Cliente.findByPk(id);
 
         if(!cliente){
             return res.status(404).json({

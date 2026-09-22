@@ -9,3 +9,4 @@ export const validarCategoria = (req, res, next) => {
 
     next();
 };
+

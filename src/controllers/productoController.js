@@ -17,6 +17,33 @@ export const obtenerProductos = async (req, res) => {
     }
 }
 
+export const obtenerProducto = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const producto = await Producto.findByPk(id, {
+            include: {
+                model: Categoria
+            }
+        });
+
+        if (!producto) {
+            return res.status(404).json({
+                error: "Producto no encontrada"
+            });
+        }
+
+        res.status(200).json(producto);
+
+    } catch (error) {
+        console.error("Error al obtener producto:", error.message);
+
+        res.status(500).json({
+            error: "Error al obtener producto"
+        });
+    }
+};
+
 export const crearProducto = async (req, res) => {
     try{
         const { sku , nombre, precio, stock, categoriaId } = req.body
@@ -82,7 +109,7 @@ export const eliminarProducto = async (req, res) => {
     try{
         const { id } = req.params;
 
-        const producto = Producto.findByPk(id);
+        const producto = await Producto.findByPk(id);
 
         if(!producto){
             return res.status(404).json({

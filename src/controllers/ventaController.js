@@ -1,4 +1,4 @@
-import { Venta, Producto, Cliente } from "../models/index.js";
+import { Venta, Producto, Cliente, Categoria } from "../models/index.js";
 
 export const obtenerVentas = async (req, res) => {
     try{
@@ -22,6 +22,38 @@ export const obtenerVentas = async (req, res) => {
     }
 }
 
+export const obtenerVenta = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const venta = await Venta.findByPk(id, {
+            include:[
+                {
+                    model: Producto
+                },
+                {
+                    model: Cliente
+                }
+            ]
+        });
+
+        if (!venta) {
+            return res.status(404).json({
+                error: "Venta no encontrada"
+            });
+        }
+
+        res.status(200).json(venta);
+
+    } catch (error) {
+        console.error("Error al obtener venta:", error.message);
+
+        res.status(500).json({
+            error: "Error al obtener venta"
+        });
+    }
+};
+
 export const crearVenta = async (req, res) => {
     try{
         const { cantidad, total, productoId, clienteId} = req.body
@@ -35,7 +67,7 @@ export const crearVenta = async (req, res) => {
 
         res.status(201).json({
             mensaje: "Venta creada con exito",
-            categoria
+            venta
         })
     }catch(error){
         console.error('Error al crear la venta:', error.message)
@@ -50,7 +82,7 @@ export const actualizarVenta = async (req, res) => {
     try{
 
         const { id } = req.params;
-        const { cantidad, total, productoId, clienteId } = req.body
+        const { cantidad, total, productoId, clienteId} = req.body
 
         const venta = await Venta.findByPk(id);
 
@@ -60,11 +92,10 @@ export const actualizarVenta = async (req, res) => {
             });
         }
 
-        venta.sku = sku;
-        venta.nombre = nombre;
-        venta.precio = precio;
-        venta.stock = stock;
-        venta.categoriaId = categoriaId;
+        venta.cantidad = cantidad;
+        venta.total = total;
+        venta.productoId = productoId;
+        venta.clienteId = clienteId;
 
         await venta.save();
 
@@ -86,7 +117,7 @@ export const eliminarVenta = async (req, res) => {
     try{
         const { id } = req.params;
 
-        const venta = Venta.findByPk(id);
+        const venta = await Venta.findByPk(id);
 
         if(!venta){
             return res.status(404).json({

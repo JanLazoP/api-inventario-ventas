@@ -72,7 +72,7 @@ export const eliminarCategoria = async (req, res) => {
     try{
         const { id } = req.params;
 
-        const categoria = Categoria.findByPk(id);
+        const categoria = await Categoria.findByPk(id);
 
         if(!categoria){
             return res.status(404).json({
@@ -94,3 +94,26 @@ export const eliminarCategoria = async (req, res) => {
         });
     }
 }
+
+export const obtenerCategoria = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const categoria = await Categoria.findByPk(id);
+
+        if (!categoria) {
+            return res.status(404).json({
+                error: "Categoría no encontrada"
+            });
+        }
+
+        res.status(200).json(categoria);
+
+    } catch (error) {
+        console.error("Error al obtener categoría:", error.message);
+
+        res.status(500).json({
+            error: "Error al obtener categoría"
+        });
+    }
+};
